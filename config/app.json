@@ -1,0 +1,7 @@
+{
+    "db": {
+      "dsn": "mysql:host=127.0.0.1;dbname=k02",
+      "user": "root",
+      "password": "root"
+    }
+  }

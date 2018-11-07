@@ -1,0 +1,6 @@
+{
+    "": {
+        "controller": "Post",
+        "method": "start"
+    }
+}
