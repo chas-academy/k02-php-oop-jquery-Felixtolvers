@@ -1,8 +1,8 @@
 <?php 
     include 'core/init.php';
     $id = $_SESSION['id'];
-    $user = $getFromU->userData($id);
-
+	$user = $getFromU->userData($id);
+	$getFromU->update('users', $id, array('screenName' => 'felixnew'));
 ?>
 
 <!DOCTYPE HTML> 
