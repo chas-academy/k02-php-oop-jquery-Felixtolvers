@@ -54,7 +54,7 @@ class User {
     public function logout(){
         $_SESSION = array();
         session_destroy();
-        header('Location: ../index.php');    
+        header('Location: '.BASE_URL.'index.php');    
     }
 
     public function create($table, $fields = array()) {
@@ -90,6 +90,20 @@ class User {
             $stmt->execute();
         }
     }
+
+    public function checkUsername($username){
+        $stmt = $this->pdo->prepare("SELECT `username` FROM `users` WHERE `username` = :username");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $count = $stmt->rowCount();
+        if($count > 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public function checkEmail($email){
         $stmt = $this->pdo->prepare("SELECT `email` FROM `users` WHERE `email` = :email");
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -101,6 +115,18 @@ class User {
         }else {
             return false;
         }
+    }
+
+    public function loggedIn(){
+        return (isset($_SESSION['id'])) ? true : false;
+    }
+
+    public function userIdByUsername($username){
+        $stmt = $this->pdo->prepare("SELECT `id` FROM `users` WHERE `username` = :username");
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_OBJ);
+        return $user->id;
     }
 }
 

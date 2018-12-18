@@ -2,7 +2,9 @@
     include 'core/init.php';
     $id = $_SESSION['id'];
 	$user = $getFromU->userData($id);
-	$getFromU->update('users', $id, array('screenName' => 'felixnew'));
+	if($getFromU->loggedIn() === false){
+		header('Location: index.php');
+	}
 ?>
 
 <!DOCTYPE HTML> 
