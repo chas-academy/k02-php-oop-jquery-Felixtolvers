@@ -5,6 +5,24 @@
 	if($getFromU->loggedIn() === false){
 		header('Location: index.php');
 	}
+
+	if(isset($_POST['tweet'])){
+		$status = $getFromU->checkInput($_POST['status']);
+		$tweetImage = '';
+
+		if(!empty($status) or !empty($_FILES['file']['name'][0])){
+			if(!empty($_FILES['file']['name'][0])){
+				$tweetImage = $getFromU->uploadImage($_FILES['file']);
+			}
+
+			if(strlen($status) > 140){
+				$error = "Your tweet must contain 140 characters or less";
+			}
+			$getFromU->create('tweets', array('status' => $status, 'tweetBy' => $id, 'tweetImage' => $tweetImage, 'postedOn' => date('Y-m-d H:i:s')));
+		}else {
+			$error = "Type or choose image to tweet";
+		}
+	}
 ?>
 
 <!DOCTYPE HTML> 
@@ -16,7 +34,6 @@
  	  	  <link rel="stylesheet" href="assets/css/style-complete.css"/> 
    		  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>  	  
 	</head>
-	<!--Helvetica Neue-->
 <body>
 <div class="wrapper">
 <!-- header wrapper -->
@@ -57,13 +74,10 @@
 				</li>
 				<li><label class="addTweetBtn">Tweet</label></li>
 			</ul>
-		</div><!-- nav right ends-->
-
-	</div><!-- nav ends -->
-
-</div><!-- nav container ends -->
-
-</div><!-- header wrapper end -->
+		</div>
+	</div>
+</div>
+</div>
 
 <!---Inner wrapper-->
 <div class="inner-wrapper">
@@ -117,17 +131,15 @@
 								<span class="count-followers"><?php echo $user->followers; ?></span>
 							</div>
 						</div>	
-					</div><!-- mumber wrapper-->
-				</div><!-- info in footer -->
-			</div><!-- info inner end -->
-		</div><!-- info box end-->
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<!--==TRENDS==-->
  	  <!---TRENDS HERE-->
- 	<!--==TRENDS==-->
 
-	</div><!-- in left wrap-->
-		</div><!-- in left end-->
+	</div>
+		</div><
 		<div class="in-center">
 			<div class="in-center-wrap">
 				<!--TWEET WRAPPER-->
@@ -141,7 +153,7 @@
 						 </div>
 						 <div class="tweet-body">
 						 <form method="post" enctype="multipart/form-data">
-							<textarea class="status" name="status" placeholder="Type Something here!" rows="4" cols="50"></textarea>
+							<textarea class="status" name="status" placeholder="Tweet something!" rows="4" cols="50"></textarea>
  						 	<div class="hash-box">
 						 		<ul>
   						 		</ul>
@@ -152,7 +164,7 @@
 						 		<ul>
 						 			<input type="file" name="file" id="file"/>
 						 			<li><label for="file"><i class="fa fa-camera" aria-hidden="true"></i></label>
-						 			<span class="tweet-error"></span>
+						 			<span class="tweet-error"><?php if(isset($error)){echo $error;}else if(isset($imageError)){echo $imageError;} ?></span>
 						 			</li>
 						 		</ul>
 						 	</div>
@@ -166,17 +178,17 @@
 				</div><!--TWEET WRAP END-->
 
 			
-				<!--Tweet SHOW WRAPPER-->
+
 				 <div class="tweets">
- 				  	<!--TWEETS HERE-->
+
  				 </div>
- 				<!--TWEETS SHOW WRAPPER-->
+
 
 		    	<div class="loading-div">
 		    		<img id="loader" src="assets/images/loading.svg" style="display: none;"/> 
 		    	</div>
 				<div class="popupTweet"></div>
-				<!--Tweet END WRAPER-->
+	
  			
 			</div><!-- in left wrap-->
 		</div><!-- in center end -->
@@ -185,18 +197,16 @@
 			<div class="in-right-wrap">
 
 		 	<!--Who To Follow-->
-		      <!--WHO_TO_FOLLOW HERE-->
-      		<!--Who To Follow-->
 
- 			</div><!-- in left wrap-->
+ 			</div>
 
-		</div><!-- in right end -->
+		</div>
 
-	</div><!--in full wrap end-->
+	</div>
 
-</div><!-- in wrappper ends-->
-</div><!-- inner wrapper ends-->
-</div><!-- ends wrapper -->
+</div>
+</div>
+</div>
 </body>
 
 </html>
